@@ -14,7 +14,7 @@
   "sent": {
     "2026-09-21T20:00:00Z": {
       "found": true,
-      "remind": false
+      "remind": true
     }
   }
 }
