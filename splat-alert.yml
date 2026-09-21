@@ -1,0 +1,41 @@
+name: 스플래툰 맵 알림
+
+on:
+  schedule:
+    # 매시 15분, 45분에 실행 (정각은 GitHub가 붐벼서 피함)
+    # 맵은 정각에 바뀌므로 45분 실행이 '15분 전 알림' 역할을 해요
+    - cron: "15,45 * * * *"
+  workflow_dispatch:
+    inputs:
+      test_message:
+        description: "디스코드 연결 테스트 메시지만 보내기"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: splat-alert
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 스케줄 확인 및 알림
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          TEST_MESSAGE: ${{ inputs.test_message && '1' || '' }}
+        run: python3 splat_alert.py
+
+      - name: 알림 기록 저장
+        if: ${{ !inputs.test_message }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state.json 2>/dev/null || true
+          git diff --cached --quiet || (git commit -m "알림 기록 갱신" && git push)
