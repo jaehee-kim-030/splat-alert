@@ -1,11 +1,7 @@
 {
-  "fetched_at": "2026-11-20T16:05:10.643015+00:00",
+  "fetched_at": "2026-11-20T22:38:31.190094+00:00",
   "matches": [],
   "sent": {
-    "2026-11-18T20:00:00Z": {
-      "found": true,
-      "remind": false
-    },
     "2026-11-19T08:00:00Z": {
       "found": true,
       "remind": true
